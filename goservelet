@@ -1,0 +1,67 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package calc;
+
+import java.io.IOException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author Is_17_1
+ */
+@WebServlet(name = "GoServlet", urlPatterns = {"/GoServlet"})
+public class GoServlet extends HttpServlet {
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            response.setContentType("text/html;charset=UTF-8");
+            request.setCharacterEncoding("UTF-8");
+            Double one = Double.parseDouble(request.getParameter("one"));
+            Double two = Double.parseDouble(request.getParameter("two"));
+            String oper = request.getParameter("oper");
+            Double result = 0.;
+            switch (oper) {
+                case ("/"):
+                    result = one / two;
+                    break;
+                case ("+"):
+                    result = one + two;
+                    break;
+                case ("-"):
+                    result = one - two;
+                    break;
+                case ("*"):
+                    result = one * two;
+                    break;
+                default:
+                    throw new Exception("Неизвестный оператор");
+            }
+            request.setAttribute("result", result.toString());
+        } catch (Exception ex) {
+            request.setAttribute("result", ex.getMessage());
+        }
+        RequestDispatcher d = request.getRequestDispatcher("/index.jsp");
+        d.forward(request, response);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+}
